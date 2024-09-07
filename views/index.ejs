@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do List</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>TODOLIST</h1>
+        <form action="/add-task" method="POST">
+            <input type="text" name="task" placeholder="what needs to be done?" required>
+            <button class="add" type="submit">add</button>
+        </form>
+
+        <ul>
+            <% tasks.forEach((task, index) => { %>
+                <li>
+                    <form action="/toggle-complete" method="POST" style="display:inline;">
+                        <input type="hidden" name="taskIndex" value="<%= index %>">
+                        <input type="checkbox" onchange="this.form.submit()" <%= task.completed ? 'checked' : '' %>>
+                        <span class="<%= task.completed ? 'completed' : '' %>"><%= task.text %></span>
+                    </form>
+                    <form action="/delete-task" method="POST" style="display:inline;">
+                        <input type="hidden" name="taskIndex" value="<%= index %>">
+                        <button class="btn-delete" type="submit">Delete</button>
+                    </form>
+                    <form action="/edit-task" method="GET" style="display:inline;">
+                        <input type="hidden" name="taskIndex" value="<%= index %>">
+                        <button class="btn-edit" type="submit">Edit</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+
+        <form action="/remove-task" method="POST">
+            <button class="remove-checked"type="submit">Remove checked</button>
+        </form>
+
+         <p class="task-counter"><%= tasks.filter(task => task.completed).length %> of <%= tasks.length %> tasks done</p>
+    </div>
+</body>
+</html>
